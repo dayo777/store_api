@@ -1,0 +1,5 @@
+.env
+target/
+store_db/*
+.idea
+*.db

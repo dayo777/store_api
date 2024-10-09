@@ -1,0 +1,5 @@
+target/
+store_db/*
+.env
+*.md
+scripts/

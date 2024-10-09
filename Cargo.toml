@@ -1,0 +1,15 @@
+[workspace]
+members = [
+	"store",
+	"database",
+	"orders",
+	"customer", 
+	"product", 
+	"category",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+authors = ["Oludayo Orunsolu"]
+description = "basic store tutorial idea"
