@@ -7,7 +7,7 @@ use validator::Validate;
 // name => min of 5 characters
 // description => min of 6 characters
 
-#[derive(Deserialize, Validate)]
+#[derive(Deserialize, Validate, Debug)]
 pub(crate) struct NewCategory {
     #[validate(length(min = 5))]
     pub(crate) name: String,
@@ -15,7 +15,7 @@ pub(crate) struct NewCategory {
     pub(crate) description: String,
 }
 
-#[derive(Serialize, Deserialize, Validate)]
+#[derive(Serialize, Deserialize, Validate, Debug)]
 pub struct Category {
     pub id: Option<Thing>,
     #[validate(length(min = 5))]
@@ -26,12 +26,12 @@ pub struct Category {
     pub(crate) updated_at: Option<DateTime<Utc>>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 pub(crate) struct CategoryStruct {
     pub(crate) name: String,
 }
 
-#[derive(Deserialize, Validate)]
+#[derive(Deserialize, Validate, Debug)]
 pub(crate) struct UpdateCategoryDesc {
     pub(crate) name: String,
     #[validate(length(min = 6))]
