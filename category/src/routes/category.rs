@@ -25,7 +25,8 @@ pub(crate) async fn get_category(category_uri: web::Json<CategoryStruct>) -> imp
     match CategoryStruct::get_category(category_uri.into_inner()).await {
         Ok(category) => {
             info!("Get category route: {}", log_name);
-            HttpResponse::Ok().json(category) },
+            HttpResponse::Ok().json(category)
+        }
         Err(e) => {
             error!("Error getting category: {}", log_name);
             HttpResponse::NotFound().json(e.to_string())
@@ -53,7 +54,8 @@ pub(crate) async fn delete_category(delete_category: web::Json<CategoryStruct>) 
     match CategoryStruct::delete_category(delete_category.into_inner()).await {
         Ok(msg) => {
             info!("Delete category route: {}", log_name);
-            HttpResponse::Ok().json(msg) },
+            HttpResponse::Ok().json(msg)
+        }
         Err(e) => {
             error!("Error deleting category route: {}", log_name);
             HttpResponse::NotFound().body(e.to_string())

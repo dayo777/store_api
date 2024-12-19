@@ -1,0 +1,20 @@
+{"timestamp":"2024-12-19T13:10:28.937164Z","level":"INFO","fields":{"message":"starting 8 workers"},"target":"actix_server::builder"}
+{"timestamp":"2024-12-19T13:10:28.937382Z","level":"INFO","fields":{"message":"Tokio runtime found; starting in existing Tokio runtime"},"target":"actix_server::server"}
+{"timestamp":"2024-12-19T13:10:28.937577Z","level":"INFO","fields":{"message":"starting service: \"actix-web-service-127.0.0.1:8000\", workers: 8, listening on: 127.0.0.1:8000"},"target":"actix_server::server"}
+{"timestamp":"2024-12-19T13:13:12.567878Z","level":"ERROR","fields":{"message":"Duplicate category, category1"},"target":"category::domain::category","span":{"name":"create_new_category"},"spans":[{"name":"create_new_category"}]}
+{"timestamp":"2024-12-19T13:13:12.568083Z","level":"ERROR","fields":{"message":"Error creating category: category1"},"target":"category::routes::category","span":{"name":"create_new_category"},"spans":[{"name":"create_new_category"}]}
+{"timestamp":"2024-12-19T13:14:15.231913Z","level":"ERROR","fields":{"message":"Duplicate category, category2"},"target":"category::domain::category","span":{"name":"create_new_category"},"spans":[{"name":"create_new_category"}]}
+{"timestamp":"2024-12-19T13:14:15.232080Z","level":"ERROR","fields":{"message":"Error creating category: category2"},"target":"category::routes::category","span":{"name":"create_new_category"},"spans":[{"name":"create_new_category"}]}
+{"timestamp":"2024-12-19T13:20:29.607803Z","level":"INFO","fields":{"message":"Created new product route: \"product1\""},"target":"product::routes::product","span":{"name":"create_product"},"spans":[{"name":"create_product"}]}
+{"timestamp":"2024-12-19T13:20:46.104986Z","level":"INFO","fields":{"message":"Getting category list from database."},"target":"category::domain::category","span":{"name":"list_categories"},"spans":[{"name":"list_categories"}]}
+{"timestamp":"2024-12-19T13:20:46.107192Z","level":"INFO","fields":{"message":"List categories route: 12"},"target":"category::routes::category","span":{"name":"list_categories"},"spans":[{"name":"list_categories"}]}
+{"timestamp":"2024-12-19T13:21:23.852634Z","level":"INFO","fields":{"message":"SIGINT received; starting forced shutdown"},"target":"actix_server::server"}
+{"timestamp":"2024-12-19T13:21:23.853426Z","level":"INFO","fields":{"message":"accept thread stopped"},"target":"actix_server::accept"}
+{"timestamp":"2024-12-19T13:21:23.853513Z","level":"INFO","fields":{"message":"shutting down idle worker"},"target":"actix_server::worker"}
+{"timestamp":"2024-12-19T13:21:23.853551Z","level":"INFO","fields":{"message":"shutting down idle worker"},"target":"actix_server::worker"}
+{"timestamp":"2024-12-19T13:21:23.853624Z","level":"INFO","fields":{"message":"shutting down idle worker"},"target":"actix_server::worker"}
+{"timestamp":"2024-12-19T13:21:23.853833Z","level":"INFO","fields":{"message":"shutting down idle worker"},"target":"actix_server::worker"}
+{"timestamp":"2024-12-19T13:21:23.854060Z","level":"INFO","fields":{"message":"shutting down idle worker"},"target":"actix_server::worker"}
+{"timestamp":"2024-12-19T13:21:23.854213Z","level":"INFO","fields":{"message":"shutting down idle worker"},"target":"actix_server::worker"}
+{"timestamp":"2024-12-19T13:21:23.854702Z","level":"INFO","fields":{"message":"shutting down idle worker"},"target":"actix_server::worker"}
+{"timestamp":"2024-12-19T13:21:23.855058Z","level":"INFO","fields":{"message":"shutting down idle worker"},"target":"actix_server::worker"}

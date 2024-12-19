@@ -5,6 +5,8 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, Layer};
 
 mod start_web_server;
 
+// names & emails are logged but could be removed using a Redaction solution
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
     // run the script to create the `logs` folder before creating this part

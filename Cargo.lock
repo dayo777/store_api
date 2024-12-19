@@ -769,7 +769,6 @@ dependencies = [
  "surrealdb",
  "thiserror",
  "tracing",
- "tracing-subscriber",
  "validator",
 ]
 
@@ -1006,6 +1005,7 @@ dependencies = [
  "surrealdb",
  "thiserror",
  "tokio",
+ "tracing",
  "validator",
 ]
 
@@ -1070,6 +1070,7 @@ dependencies = [
  "dotenvy",
  "once_cell",
  "surrealdb",
+ "tracing",
 ]
 
 [[package]]
@@ -2263,6 +2264,7 @@ dependencies = [
  "serde_json",
  "surrealdb",
  "thiserror",
+ "tracing",
  "validator",
 ]
 
@@ -2575,6 +2577,7 @@ dependencies = [
  "serde_json",
  "surrealdb",
  "thiserror",
+ "tracing",
  "validator",
 ]
 

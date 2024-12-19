@@ -1,6 +1,7 @@
 use crate::domain::utils;
 use crate::error::OrderError;
 use crate::models::order::{NewOrder, Order, OrderID, OrderStatus, OrderUpdateStatus};
+use tracing::error;
 use validator::Validate;
 
 // import Customer structs
@@ -21,6 +22,7 @@ impl NewOrder {
             shipping_address: new_order.shipping_address.clone(),
         };
         if let Err(e) = new_order.validate() {
+            error!("Error validating new order: {}", e);
             return Err(OrderError::ValidationError(e));
         }
 
@@ -74,6 +76,7 @@ impl OrderID {
             customer_email: order_id.clone(),
         };
         if let Err(e) = validation_check1.validate() {
+            error!("Error retrieving order, validation failed: {}", e);
             return Err(OrderError::ValidationError(e));
         }
 
@@ -97,6 +100,7 @@ impl OrderUpdateStatus {
             status: order_update.status.clone(),
         };
         if let Err(e) = validation_check.validate() {
+            error!("Error updating customer status, validation failed: {}", e);
             return Err(OrderError::ValidationError(e));
         }
 

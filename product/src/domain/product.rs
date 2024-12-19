@@ -1,10 +1,10 @@
 use super::utils;
 use crate::error::ProductError;
 use crate::models::product::{NewProduct, Product, ProductStruct, UpdateProduct};
-use database::DB;
-use validator::Validate;
-
 use category::check_if_category_exist;
+use database::DB;
+use tracing::{error, info};
+use validator::Validate;
 
 impl NewProduct {
     pub(crate) async fn create_new_product(
@@ -19,18 +19,24 @@ impl NewProduct {
             stock_quantity: new_product.stock_quantity,
         };
         if let Err(e) = product_basic_check.validate() {
+            error!(
+                "Error creating new product, failed validation checks: {:?}",
+                e
+            );
             return Err(ProductError::ValidationError(e));
         }
 
         // confirm product Name is not a duplicate
         let name_exists = utils::check_if_product_exist(new_product.name.to_lowercase()).await;
         if name_exists {
+            error!("Error validating new product, name already exists");
             return Err(ProductError::DuplicateProductName);
         }
 
         // confirm that category name exists
         let category_exists = check_if_category_exist(new_product.category.to_lowercase()).await;
         if !category_exists {
+            error!("Error validating new product, category already exists");
             return Err(ProductError::InvalidCategory);
         }
 
@@ -65,13 +71,15 @@ impl UpdateProduct {
     pub(crate) async fn update_product(update_product: UpdateProduct) -> Result<(), ProductError> {
         let product_check = utils::check_if_product_exist(update_product.name.to_lowercase()).await;
         if !product_check {
+            error!("Error validating update product, product already exists");
             return Err(ProductError::ProductDoesNotExist);
         }
 
         let updated_at = utils::get_datetime();
-
+        let log_detail = update_product.name.clone();
         // update the description if supplied
         if let Some(update_description) = update_product.description {
+            info!("Product description updated: {}", log_detail);
             let _ = DB
                 .query("UPDATE product SET description = $desc, updated_at = $updated_at WHERE name = $name")
                 .bind(("desc", update_description))
@@ -82,6 +90,7 @@ impl UpdateProduct {
 
         // update price if supplied
         if let Some(update_price) = update_product.price {
+            info!("Product price updated: {}", log_detail);
             let _ = DB
                 .query("UPDATE product SET price = $price, updated_at = $updated_at WHERE name = $name")
                 .bind(("price", update_price))
@@ -92,6 +101,7 @@ impl UpdateProduct {
 
         // increase the quantity if supplied
         if let Some(updated_stock_quantity) = update_product.stock_quantity {
+            info!("Product stock_quantity updated: {}", log_detail);
             let _ = DB
                 .query("UPDATE product SET stock_quantity += $qty, updated_at = $updated_at WHERE name = $name")
                 .bind(("qty", updated_stock_quantity))

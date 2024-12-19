@@ -2,9 +2,9 @@ use super::utils;
 use crate::error::CategoryError;
 use crate::models::category::{Category, CategoryStruct, NewCategory, UpdateCategoryDesc};
 use database::DB;
+use tracing::error;
 use tracing::info;
 use validator::Validate;
-use tracing::error;
 
 impl NewCategory {
     pub(crate) async fn new_category(new_category: NewCategory) -> Result<String, CategoryError> {
@@ -55,7 +55,10 @@ impl UpdateCategoryDesc {
         let category_check =
             utils::check_if_category_exist(update_category.name.to_lowercase()).await;
         if !category_check {
-            error!("Error updating category, category does not exist, {}", update_category.name.clone());
+            error!(
+                "Error updating category, category does not exist, {}",
+                update_category.name.clone()
+            );
             return Err(CategoryError::NotFound);
         }
 
@@ -114,7 +117,10 @@ impl CategoryStruct {
         let category_check =
             utils::check_if_category_exist(category_struct.name.to_lowercase()).await;
         if !category_check {
-            error!("Error deleting category, category does not exist: {}", category_struct.name.clone());
+            error!(
+                "Error deleting category, category does not exist: {}",
+                category_struct.name.clone()
+            );
             return Err(CategoryError::NotFound);
         }
 

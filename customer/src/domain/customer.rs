@@ -5,6 +5,7 @@ use crate::models::customer::{
     UpdateCustomerStruct,
 };
 use database::DB;
+use tracing::{error, info};
 use validator::Validate;
 
 impl NewCustomer {
@@ -13,6 +14,7 @@ impl NewCustomer {
         let email_exists =
             utils::check_if_email_exists(new_customer.email.clone().to_lowercase()).await;
         if email_exists {
+            error!("Unable to create new user, email already exists.");
             return Err(CustomerError::DuplicateEmailAddress);
         }
 
@@ -20,6 +22,7 @@ impl NewCustomer {
         let name_exists =
             utils::check_if_name_exists(new_customer.name.clone().to_lowercase()).await;
         if name_exists {
+            error!("Unable to create new customer, name already exists.");
             return Err(CustomerError::DuplicateEmailAddress);
         }
 
@@ -43,6 +46,10 @@ impl NewCustomer {
 
         // Validate details
         if let Err(e) = new_customer.validate() {
+            error!(
+                "Unable to create new user due to validation error: {}",
+                e.clone()
+            );
             return Err(CustomerError::ValidationFailed(e));
         }
 
@@ -61,6 +68,7 @@ impl Customer {
     pub(crate) async fn delete_customer(email: String) -> Result<String, CustomerError> {
         let email_check = utils::check_if_email_exists(email.clone()).await;
         if !email_check {
+            error!("Unable to delete user, email does not exist.");
             return Err(CustomerError::CustomerDoesNotExist);
         }
 
@@ -84,6 +92,7 @@ impl ChangePasswordStruct {
             new_password: password_change.new_password.clone(),
         };
         if let Err(e) = validation_check_1.validate() {
+            error!("Unable to change password due to validation error: {}", e);
             return Err(CustomerError::ValidationFailed(e));
         }
 
@@ -93,6 +102,7 @@ impl ChangePasswordStruct {
             password_change.new_password.clone(),
         );
         if validation_check_2 {
+            error!("Unable to change password due to validation error, password match error.");
             return Err(CustomerError::PasswordMatchError);
         }
 
@@ -131,13 +141,15 @@ impl UpdateCustomerStruct {
     ) -> Result<(), CustomerError> {
         let email_check = utils::check_if_email_exists(update_customer.email.clone()).await;
         if !email_check {
+            error!("Unable to update customer, email does not exist.");
             return Err(CustomerError::CustomerDoesNotExist);
         }
 
         let updated_at = utils::get_datetime();
-
+        let log_detail = update_customer.email.clone().to_lowercase();
         // update the name if supplied
         if let Some(update_name) = update_customer.name {
+            info!("Updating customer name: {}", &log_detail);
             let _ = DB
                 .query("UPDATE customer SET name = $name, updated_at = $updated_at WHERE email = $email")
                 .bind(("name", update_name))
@@ -148,6 +160,7 @@ impl UpdateCustomerStruct {
 
         // update the address if supplied
         if let Some(update_address) = update_customer.address {
+            info!("Updating customer address: {}", &log_detail);
             let _ = DB
                 .query("UPDATE customer SET address = $address, updated_at = $updated_at WHERE email = $email")
                 .bind(("address", update_address))
@@ -158,6 +171,7 @@ impl UpdateCustomerStruct {
 
         // update the phone number if supplied
         if let Some(update_phone) = update_customer.phone {
+            info!("Updating customer phone: {}", &log_detail);
             let _ = DB
                 .query("UPDATE customer SET phone = $phone, updated_at = $updated_at WHERE email = $email")
                 .bind(("phone", update_phone))
@@ -167,6 +181,7 @@ impl UpdateCustomerStruct {
         }
 
         if let Some(customer_type) = update_customer.customer_type {
+            info!("Updating customer type: {}", &log_detail);
             let _ = DB
                 .query("UPDATE customer SET customer_type = $customer_type, updated_at = $updated_at WHERE email = $email")
                 .bind(("customer_type", customer_type))
@@ -188,11 +203,16 @@ impl CustomerEmailStruct {
             email: email.clone(),
         };
         if let Err(e) = customer_email.validate() {
+            error!(
+                "Unable to get customer email due to validation error: {}",
+                e
+            );
             return Err(CustomerError::ValidationFailed(e));
         }
 
         let email_check = utils::check_if_email_exists(email.clone()).await;
         if !email_check {
+            error!("Unable to get customer, email does not exist.");
             return Err(CustomerError::CustomerDoesNotExist);
         }
 
@@ -216,6 +236,10 @@ impl ChangeEmailStruct {
             new_email: email_struct.email.clone(),
         };
         if let Err(e) = email_check.validate() {
+            error!(
+                "Unable to update customer email due to validation error: {}",
+                e
+            );
             return Err(CustomerError::ValidationFailed(e));
         }
 
@@ -224,12 +248,14 @@ impl ChangeEmailStruct {
             email_struct.email.clone(),
             email_struct.new_email.clone(),
         ) {
+            error!("Unable to update customer email due to old_password_are_different");
             return Err(CustomerError::SameEmailError);
         }
 
         // check if email exist
         let email_check = utils::check_if_email_exists(email_struct.email.to_lowercase()).await;
         if !email_check {
+            error!("Unable to update customer, email does not exist.");
             return Err(CustomerError::CustomerDoesNotExist);
         }
 
@@ -237,6 +263,7 @@ impl ChangeEmailStruct {
         let new_email_check =
             utils::check_if_email_exists(email_struct.new_email.to_lowercase()).await;
         if new_email_check {
+            error!("Unable to update customer email due, old & new email are the same");
             return Err(CustomerError::SameEmailError);
         }
 
