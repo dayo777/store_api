@@ -11,7 +11,7 @@ mod start_web_server;
 async fn main() -> Result<(), Box<dyn Error>> {
     // run the script to create the `logs` folder before creating this part
     let dir_path = "../../logs";
-    if std::fs::metadata(&dir_path).is_err() {
+    if std::fs::metadata(dir_path).is_err() {
         std::fs::create_dir_all(dir_path)?;
     }
 
